@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TaskWiz</title>
+    <title>TripWiz</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -23,35 +23,106 @@
     <nav class="navbar navbar-expand-lg bg-body-secondary">
       <div class="container-fluid">
         <a class="navbar-brand" href="/">
-          <i class="fa-regular fa-calendar-days"></i> - TaskWiz
+          <i class="fa-solid fa-car"></i> TripWiz
         </a>
       </div>
     </nav>
 
-    <section class="container-fluid p-3">
-      <button type="button" class="btn btn-primary w-100">
-        <i class="fa-solid fa-plus"></i> Add Task
-      </button>
-      <hr />
-      <div class="row">
-        <div class="col-4">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-title">Title</h3>
-              <p class="card-text">Text</p>
+    <div class="container-fluid p-3">
+      <div class="row align-items-start">
+        <div class="col">
+          <!-- Locations -->
+          <h2 class="h3">Addresses</h2>
+          <div class="container-fluid p-0 mb-3 d-flex flex-column gap-2">
+            <!-- Start -->
+            <div class="input-group">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa-solid fa-car-side"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                name="start"
+                id="start"
+                placeholder="Start"
+              />
+              <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+            </div>
+
+            <!-- End -->
+            <div class="input-group">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa-solid fa-location-dot"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                name="end"
+                id="end"
+                placeholder="End"
+              />
+              <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+            </div>
+          </div>
+
+          <!-- Vehicle Info -->
+          <h2 class="h3">Vehicle</h2>
+          <div class="container-fluid p-0 d-flex flex-column gap-2">
+            <!-- Year -->
+            <div class="form-floating">
+              <select
+                class="form-select"
+                id="yearSelect"
+                aria-label="year select for car"
+              >
+                <option selected>2024</option>
+              </select>
+              <label for="yearSelect">Year</label>
+            </div>
+
+            <!-- Make -->
+            <div class="form-floating">
+              <select
+                class="form-select"
+                id="makeSelect"
+                aria-label="make select for car"
+              >
+                <option selected>Acura</option>
+              </select>
+              <label for="makeSelect">Make</label>
+            </div>
+
+            <!-- Model -->
+            <div class="form-floating">
+              <select
+                class="form-select"
+                id="modelSelect"
+                aria-label="model select for car"
+              >
+                <option selected>Integra</option>
+              </select>
+              <label for="modelSelect">Model</label>
+            </div>
+
+            <!-- Options -->
+            <div class="form-floating">
+              <select
+                class="form-select"
+                id="optionsSelect"
+                aria-label="options select for car"
+              >
+                <option selected>Auto (AV-S7), 4 cyl, 1.5 L, Turbo</option>
+              </select>
+              <label for="optionsSelect">Options</label>
             </div>
           </div>
         </div>
-        <div class="col-4">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-title">Title</h3>
-              <p class="card-text">Text</p>
-            </div>
-          </div>
-        </div>
+
+        <div class="w-100 d-lg-none"></div>
+
+        <div class="col-6">Map</div>
       </div>
-    </section>
+    </div>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
