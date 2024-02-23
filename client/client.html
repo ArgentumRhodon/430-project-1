@@ -38,37 +38,41 @@
         <div class="col">
           <!-- Locations -->
           <h2 class="h3">Addresses</h2>
-          <div class="container-fluid p-0 mb-3 d-flex flex-column gap-2">
-            <!-- Start -->
-            <div class="input-group">
-              <span class="input-group-text" id="basic-addon1">
-                <i class="fa-solid fa-car-side"></i>
-              </span>
-              <input
-                type="text"
-                class="form-control"
-                name="start"
-                id="start"
-                placeholder="Start"
-              />
-              <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
-            </div>
+          <form action="">
+            <div class="container-fluid p-0 mb-3 d-flex flex-column gap-2">
+              <!-- Start -->
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                  <i class="fa-solid fa-car-side"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="start"
+                  id="start"
+                  placeholder="Start"
+                  autocomplete="street-address"
+                />
+                <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+              </div>
 
-            <!-- End -->
-            <div class="input-group">
-              <span class="input-group-text" id="basic-addon1">
-                <i class="fa-solid fa-location-dot"></i>
-              </span>
-              <input
-                type="text"
-                class="form-control"
-                name="end"
-                id="end"
-                placeholder="End"
-              />
-              <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+              <!-- End -->
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                  <i class="fa-solid fa-location-dot"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="end"
+                  id="end"
+                  placeholder="End"
+                  autocomplete="street-address"
+                />
+                <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+              </div>
             </div>
-          </div>
+          </form>
 
           <!-- Vehicle Info -->
           <h2 class="h3">Vehicle</h2>
