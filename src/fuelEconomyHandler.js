@@ -1,8 +1,8 @@
 const fuelEconomyURL = "https://www.fueleconomy.gov/ws/rest/vehicle/menu";
 
-const respond = (request, response, status, object) => {
+const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { "Content-Type": "application/json" });
-  response.write(object);
+  response.write(JSON.stringify(object));
   response.end();
 };
 
@@ -16,9 +16,17 @@ const getVehicleInfo = async (endpoint) => {
 const getVehicleYears = async (request, response) => {
   const responseJSON = await getVehicleInfo("year");
 
-  respond(request, response, 200, JSON.stringify(responseJSON));
+  respondJSON(request, response, 200, responseJSON);
+};
+
+const getVehicleMake = async (request, response, parsedURL) => {
+  const query = parsedURL.query;
+  const responseJSON = await getVehicleInfo(`make?${query}`);
+
+  respondJSON(request, response, 200, responseJSON);
 };
 
 module.exports = {
   getVehicleYears,
+  getVehicleMake,
 };

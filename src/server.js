@@ -10,7 +10,8 @@ const urlStruct = {
   GET: {
     "/": clientHandler.getIndex,
     "/client.js": clientHandler.getClientJS,
-    "/vehicle": fuelEconomyHandler.getVehicleYears,
+    "/years": fuelEconomyHandler.getVehicleYears,
+    "/make": fuelEconomyHandler.getVehicleMake,
     index: clientHandler.getIndex,
   },
   HEAD: {},
@@ -22,7 +23,7 @@ const onRequest = (request, response) => {
 
   const endpoint = urlStruct[request.method][parsedURL.pathname];
   if (endpoint) {
-    return endpoint(request, response);
+    return endpoint(request, response, parsedURL);
   }
   return urlStruct.GET.index(request, response);
 };
