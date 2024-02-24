@@ -12,6 +12,8 @@ const urlStruct = {
     "/client.js": clientHandler.getClientJS,
     "/years": fuelEconomyHandler.getVehicleYears,
     "/make": fuelEconomyHandler.getVehicleMake,
+    "/model": fuelEconomyHandler.getVehicleModel,
+    "/options": fuelEconomyHandler.getVehicleOptions,
     index: clientHandler.getIndex,
   },
   HEAD: {},

@@ -26,7 +26,23 @@ const getVehicleMake = async (request, response, parsedURL) => {
   respondJSON(request, response, 200, responseJSON);
 };
 
+const getVehicleModel = async (request, response, parsedURL) => {
+  const query = parsedURL.query;
+  const responseJSON = await getVehicleInfo(`model?${query}`);
+
+  respondJSON(request, response, 200, responseJSON);
+};
+
+const getVehicleOptions = async (request, response, parsedURL) => {
+  const query = parsedURL.query;
+  const responseJSON = await getVehicleInfo(`options?${query}`);
+
+  respondJSON(request, response, 200, responseJSON);
+};
+
 module.exports = {
   getVehicleYears,
   getVehicleMake,
+  getVehicleModel,
+  getVehicleOptions,
 };
