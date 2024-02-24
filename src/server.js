@@ -10,7 +10,7 @@ const urlStruct = {
   GET: {
     "/": clientHandler.getIndex,
     "/client.js": clientHandler.getClientJS,
-    "/vehicle": fuelEconomyHandler.getVehicleRecord,
+    "/vehicle": fuelEconomyHandler.getVehicleYears,
     index: clientHandler.getIndex,
   },
   HEAD: {},

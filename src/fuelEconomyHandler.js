@@ -1,15 +1,18 @@
-const getVehicleRecord = async (request, response) => {
-  const res = await fetch(`https://www.fueleconomy.gov/ws/rest/vehicle/31873`, {
-    headers: { Accept: "application/json" },
-  });
+const fuelEconomyURL = "https://www.fueleconomy.gov/ws/rest/vehicle/menu";
 
-  const resJson = await res.json();
-
+const getVehicleYears = async (request, response) => {
+  const res = await fetch(
+    `https://www.fueleconomy.gov/ws/rest/vehicle/menu/year`,
+    {
+      headers: { Accept: "application/json" },
+    }
+  );
+  const responseJSON = await res.json();
   response.writeHead(200, { "Content-Type": "application/json" });
-  response.write(JSON.stringify(resJson));
+  response.write(JSON.stringify(responseJSON));
   response.end();
 };
 
 module.exports = {
-  getVehicleRecord,
+  getVehicleYears,
 };
