@@ -18,6 +18,24 @@ script.onload = function () {
 };
 document.head.appendChild(script);
 
+// The vehicle used in the trip
+let vehicle = {};
+let locations = {};
+let trip = {};
+
+const startInput = document.getElementById("start");
+const endInput = document.getElementById("end");
+
+startInput.value = "";
+endInput.value = "";
+
+startInput.addEventListener("change", () => {
+  locations.start = startInput.value;
+});
+endInput.addEventListener("change", () => {
+  locations.end = endInput.value;
+});
+
 // Returns vehicle information retrieved from node server
 // Client --> Node server --> fueleconomy.gov api
 const requestVehicleInfoJSON = async (endpoint, query) => {
@@ -109,6 +127,15 @@ optionsSelect.addEventListener("change", (e) => {
     confirmVehicleBtn.disabled = true;
   }
 });
+confirmVehicleBtn.addEventListener("click", () => {
+  vehicle = {
+    year: yearSelect.value,
+    make: makeSelect.value,
+    model: modelSelect.value,
+    options: optionsSelect.value,
+  };
+  console.log(vehicle);
+});
 
 const init = async () => {
   // Disable all inputs
@@ -137,5 +164,27 @@ const init = async () => {
   // Get the form started with available years
   updateVehicleYearSelect();
 };
+
+const postTrip = async (object) => {};
+
+document.getElementById("saveTrip").addEventListener("click", async () => {
+  trip.vehicle = vehicle;
+  trip.locations = locations;
+
+  const respone = await fetch("/addTrip", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(trip),
+  });
+});
+
+document.getElementById("getTrips").addEventListener("click", async () => {
+  const trips = await fetch("/trips");
+  const object = await trips.json();
+  document.getElementById("tripContent").innerText = JSON.stringify(object);
+});
 
 init();
