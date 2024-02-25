@@ -55,9 +55,27 @@ const vehicleMakeSelect = document.getElementById("makeSelect");
 const vehicleModelSelect = document.getElementById("modelSelect");
 const vehicleOptionsSelect = document.getElementById("optionsSelect");
 
-// Fill vehicle years
-const vehicleYears = await requestVehicleInfoJSON("years");
-fillSelectOptions(vehicleYearSelect, vehicleYears.menuItem);
+const vehicleInputs = [
+  vehicleYearSelect,
+  vehicleMakeSelect,
+  vehicleModelSelect,
+  vehicleOptionsSelect,
+];
+
+// When an input is changed, open the next input
+// Also, for each input after the next, disable element and reset options
+for (let i = 0; i <= vehicleInputs.length - 1; i++) {
+  vehicleInputs[i].disabled = true;
+  vehicleInputs[i].addEventListener("change", () => {
+    vehicleInputs[i + 1].disabled = false;
+
+    for (let j = vehicleInputs.length - 1; j > i + 1; j--) {
+      const input = vehicleInputs[j];
+      input.innerHTML = "";
+      input.disabled = true;
+    }
+  });
+}
 
 const updateVehicleMakeSelect = async () => {
   const vehicleMakes = await requestVehicleInfoJSON(
@@ -67,9 +85,6 @@ const updateVehicleMakeSelect = async () => {
   fillSelectOptions(vehicleMakeSelect, vehicleMakes.menuItem);
 };
 
-// Add make options once vehicle year is selected
-vehicleYearSelect.addEventListener("change", updateVehicleMakeSelect);
-
 const updateVehicleModelSelect = async () => {
   const vehicleModels = await requestVehicleInfoJSON(
     "model",
@@ -77,8 +92,6 @@ const updateVehicleModelSelect = async () => {
   );
   fillSelectOptions(vehicleModelSelect, vehicleModels.menuItem);
 };
-
-vehicleMakeSelect.addEventListener("change", updateVehicleModelSelect);
 
 const updateVehicleOptionsSelect = async () => {
   const vehicleOptions = await requestVehicleInfoJSON(
@@ -88,4 +101,14 @@ const updateVehicleOptionsSelect = async () => {
   fillSelectOptions(vehicleOptionsSelect, vehicleOptions.menuItem);
 };
 
+vehicleYearSelect.addEventListener("change", updateVehicleMakeSelect);
+vehicleMakeSelect.addEventListener("change", updateVehicleModelSelect);
 vehicleModelSelect.addEventListener("change", updateVehicleOptionsSelect);
+
+const init = async () => {
+  const vehicleYears = await requestVehicleInfoJSON("years");
+  fillSelectOptions(vehicleYearSelect, vehicleYears.menuItem);
+  vehicleYearSelect.disabled = false;
+};
+
+init();
