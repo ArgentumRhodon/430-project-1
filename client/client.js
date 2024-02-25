@@ -18,6 +18,8 @@ script.onload = function () {
 };
 document.head.appendChild(script);
 
+// Returns vehicle information retrieved from node server
+// Client --> Node server --> fueleconomy.gov api
 const requestVehicleInfoJSON = async (endpoint, query) => {
   const vehicleInfoResponse = await fetch(
     `/${endpoint}${query ? "?" + query : ""}`,
@@ -31,9 +33,24 @@ const requestVehicleInfoJSON = async (endpoint, query) => {
   return await vehicleInfoResponse.json();
 };
 
-const fillSelectOptions = (selectElement, options) => {
-  selectElement.innerHTML = "";
+// A given option is valid if it doesn't start with "Select", which is the common
+// string element of the select inputs' default options
+const isValidOption = (option) => !option.startsWith("Select");
 
+// Retrieve inputs
+const yearSelect = document.getElementById("yearSelect");
+const makeSelect = document.getElementById("makeSelect");
+const modelSelect = document.getElementById("modelSelect");
+const optionsSelect = document.getElementById("optionsSelect");
+const confirmVehicleBtn = document.getElementById("confirmVehicle");
+
+// Store inputs in array to allow for index-based selection adjustments in event listeners
+const vehicleInputs = [yearSelect, makeSelect, modelSelect, optionsSelect];
+
+const defaults = ["Year", "Make", "Model", "Options"];
+
+const fillSelectOptions = (selectElement, options) => {
+  // FuelEco api sends different data structure if matching data count is one, which is annoying
   if (options[0]) {
     for (let option of options) {
       const optionElement = document.createElement("option");
@@ -49,66 +66,76 @@ const fillSelectOptions = (selectElement, options) => {
   }
 };
 
-// Vehicle info inputs
-const vehicleYearSelect = document.getElementById("yearSelect");
-const vehicleMakeSelect = document.getElementById("makeSelect");
-const vehicleModelSelect = document.getElementById("modelSelect");
-const vehicleOptionsSelect = document.getElementById("optionsSelect");
-
-const vehicleInputs = [
-  vehicleYearSelect,
-  vehicleMakeSelect,
-  vehicleModelSelect,
-  vehicleOptionsSelect,
-];
-
-// When an input is changed, open the next input
-// Also, for each input after the next, disable element and reset options
-for (let i = 0; i <= vehicleInputs.length - 1; i++) {
-  vehicleInputs[i].disabled = true;
-  vehicleInputs[i].addEventListener("change", () => {
-    vehicleInputs[i + 1].disabled = false;
-
-    for (let j = vehicleInputs.length - 1; j > i + 1; j--) {
-      const input = vehicleInputs[j];
-      input.innerHTML = "";
-      input.disabled = true;
-    }
-  });
-}
+const updateVehicleYearSelect = async () => {
+  const vehicleYears = await requestVehicleInfoJSON("years");
+  fillSelectOptions(yearSelect, vehicleYears.menuItem);
+  yearSelect.disabled = false;
+};
 
 const updateVehicleMakeSelect = async () => {
   const vehicleMakes = await requestVehicleInfoJSON(
     "make",
-    `year=${vehicleYearSelect.value}`
+    `year=${yearSelect.value}`
   );
-  fillSelectOptions(vehicleMakeSelect, vehicleMakes.menuItem);
+  fillSelectOptions(makeSelect, vehicleMakes.menuItem);
+  makeSelect.disabled = false;
 };
 
 const updateVehicleModelSelect = async () => {
   const vehicleModels = await requestVehicleInfoJSON(
     "model",
-    `year=${vehicleYearSelect.value}&make=${vehicleMakeSelect.value}`
+    `year=${yearSelect.value}&make=${makeSelect.value}`
   );
-  fillSelectOptions(vehicleModelSelect, vehicleModels.menuItem);
+  fillSelectOptions(modelSelect, vehicleModels.menuItem);
+  modelSelect.disabled = false;
 };
 
 const updateVehicleOptionsSelect = async () => {
   const vehicleOptions = await requestVehicleInfoJSON(
     "options",
-    `year=${vehicleYearSelect.value}&make=${vehicleMakeSelect.value}&model=${vehicleModelSelect.value}`
+    `year=${yearSelect.value}&make=${makeSelect.value}&model=${modelSelect.value}`
   );
-  fillSelectOptions(vehicleOptionsSelect, vehicleOptions.menuItem);
+  fillSelectOptions(optionsSelect, vehicleOptions.menuItem);
+  optionsSelect.disabled = false;
 };
 
-vehicleYearSelect.addEventListener("change", updateVehicleMakeSelect);
-vehicleMakeSelect.addEventListener("change", updateVehicleModelSelect);
-vehicleModelSelect.addEventListener("change", updateVehicleOptionsSelect);
+yearSelect.addEventListener("change", updateVehicleMakeSelect);
+makeSelect.addEventListener("change", updateVehicleModelSelect);
+modelSelect.addEventListener("change", updateVehicleOptionsSelect);
+optionsSelect.addEventListener("change", (e) => {
+  if (isValidOption(e.target.value)) {
+    confirmVehicleBtn.disabled = false;
+  } else {
+    confirmVehicleBtn.disabled = true;
+  }
+});
 
 const init = async () => {
-  const vehicleYears = await requestVehicleInfoJSON("years");
-  fillSelectOptions(vehicleYearSelect, vehicleYears.menuItem);
-  vehicleYearSelect.disabled = false;
+  // Disable all inputs
+  for (let input of vehicleInputs) input.disabled = true;
+  confirmVehicleBtn.disabled = true;
+
+  // All inputs except vehicleOptionsSelect: on updating an input, reset descending inputs
+  for (let i = 0; i < vehicleInputs.length - 1; i++) {
+    vehicleInputs[i].addEventListener("change", () => {
+      // If the user changes to "Select [X]" option, reset next immediate input as well
+      const closestIndexAfter = isValidOption(vehicleInputs[i].value)
+        ? i + 1
+        : i;
+
+      for (let j = vehicleInputs.length - 1; j > closestIndexAfter; j--) {
+        vehicleInputs[j].disabled = true;
+        vehicleInputs[
+          j
+        ].innerHTML = `<option selected>Select ${defaults[j]}</option>`;
+      }
+
+      confirmVehicleBtn.disabled = true;
+    });
+  }
+
+  // Get the form started with available years
+  updateVehicleYearSelect();
 };
 
 init();
