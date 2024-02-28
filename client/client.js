@@ -7,13 +7,29 @@ const map = new mapboxgl.Map({
   zoom: 9, // starting zoom
 });
 
+let autofillCollection;
+
 // Mapbox autofill init
 const script = document.createElement("script");
 script.src = "https://api.mapbox.com/search-js/v1.0.0-beta.18/web.js";
 script.onload = function () {
-  mapboxsearch.autofill({
+  autofillCollection = mapboxsearch.autofill({
     accessToken:
       "pk.eyJ1IjoibHVjYXNjb3JleSIsImEiOiJjbG9xaWp2amowZ2VyMmxtdTJ0a2g1c2JpIn0.om_UI9UBSGsTmH9KM-8iaw",
+  });
+
+  autofillCollection.addEventListener("retrieve", (e) => {
+    console.log("HEllo");
+    const extraDetails = e.detail.features[0].properties.description;
+    // Jank, but adds extra details to input on autofill
+    // Limitation: Adding anything but a street address fails
+    e.target.addEventListener(
+      "change",
+      () => {
+        e.target.value += `, ${extraDetails}`;
+      },
+      { once: true }
+    );
   });
 };
 document.head.appendChild(script);
@@ -38,9 +54,9 @@ endInput.addEventListener("change", () => {
 
 // Returns vehicle information retrieved from node server
 // Client --> Node server --> fueleconomy.gov api
-const requestVehicleInfoJSON = async (endpoint, query) => {
+const requestVehicleInfoJSON = async (type, query) => {
   const vehicleInfoResponse = await fetch(
-    `/${endpoint}${query ? "?" + query : ""}`,
+    `/vehicleInfo/${type}${query ? "?" + query : ""}`,
     {
       method: "GET",
       headers: {
@@ -85,7 +101,7 @@ const fillSelectOptions = (selectElement, options) => {
 };
 
 const updateVehicleYearSelect = async () => {
-  const vehicleYears = await requestVehicleInfoJSON("years");
+  const vehicleYears = await requestVehicleInfoJSON("year");
   fillSelectOptions(yearSelect, vehicleYears.menuItem);
   yearSelect.disabled = false;
 };
