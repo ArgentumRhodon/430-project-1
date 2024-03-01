@@ -3,6 +3,7 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoibHVjYXNjb3JleSIsImEiOiJjbG9xaWp2amowZ2VyMmxtdTJ0a2g1c2JpIn0.om_UI9UBSGsTmH9KM-8iaw";
 const map = new mapboxgl.Map({
   container: "map", // container ID
+  style: "mapbox://styles/mapbox/navigation-night-v1",
   center: [-74.5, 40], // starting position [lng, lat]
   zoom: 9, // starting zoom
 });
@@ -229,9 +230,9 @@ const getRoute = async (start, end) => {
         "line-cap": "round",
       },
       paint: {
-        "line-color": "#3887be",
+        "line-color": "#0dff8a",
         "line-width": 5,
-        "line-opacity": 0.75,
+        "line-opacity": 1,
       },
     });
   }
