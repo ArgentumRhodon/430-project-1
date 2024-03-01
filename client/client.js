@@ -205,11 +205,11 @@ const getRoute = async (start, end) => {
     },
   };
 
-  trip.distance = `${(data.distance * 3.28) / 5280} miles`;
+  trip.distance = `${Math.round((data.distance * 32.8) / 5280) / 10} miles`;
   trip.duration =
     data.duration > 3600
-      ? `${data.duration / 60 / 60} hours`
-      : `${data.duration / 60} minutes`;
+      ? `${Math.round((data.duration / 60 / 60) * 10) / 10} hours`
+      : `${Math.round((data.duration / 60) * 10) / 10} minutes`;
 
   // if the route already exists on the map, reset it using setData
   if (map.getSource("route")) {
