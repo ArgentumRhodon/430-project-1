@@ -76,7 +76,7 @@
 
           <!-- Vehicle Info -->
           <h2 class="h3">Vehicle</h2>
-          <div class="container-fluid p-0 d-flex flex-column gap-2">
+          <div class="container-fluid p-0 mb-3 d-flex flex-column gap-2">
             <!-- Year -->
             <div class="form-floating">
               <select
@@ -128,14 +128,11 @@
               </select>
               <label for="optionsSelect">Options</label>
             </div>
+          </div>
 
-            <button
-              type="button"
-              class="btn btn-primary"
-              id="confirmVehicle"
-              disabled
-            >
-              Confirm Vehicle
+          <div class="container-fluid">
+            <button type="button" class="w-100 btn btn-success" id="saveTrip">
+              Save Trip
             </button>
           </div>
         </div>
@@ -144,13 +141,10 @@
 
         <div class="col" id="map" style="min-height: 500px"></div>
 
-        <button type="button" class="btn btn-secondary" id="saveTrip">
-          Save Trip
-        </button>
-        <button type="button" class="btn btn-success" id="getTrips">
+        <button type="button" class="w-100 btn btn-secondary" id="getTrips">
           Get Trips
         </button>
-        <div id="tripContent"></div>
+        <div id="tripContent" class="container-fluid"></div>
       </div>
     </div>
 
