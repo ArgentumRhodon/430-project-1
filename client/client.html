@@ -35,109 +35,118 @@
 
     <div class="container p-3">
       <div class="row gap-3">
-        <div class="col">
+        <div class="col-2 vstack justify-content-between">
           <!-- Locations -->
-          <h2 class="h3">Addresses</h2>
-          <form action="">
-            <div class="container-fluid p-0 mb-3 d-flex flex-column gap-2">
-              <!-- Start -->
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">
-                  <i class="fa-solid fa-car-side"></i>
-                </span>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="start"
-                  id="start"
-                  placeholder="Start"
-                  autocomplete="street-address"
-                />
-                <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+          <section>
+            <h2 class="h3">Addresses</h2>
+            <form action="">
+              <div class="container-fluid p-0 mb-3 vstack gap-2">
+                <!-- Start -->
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon1">
+                    <i class="fa-solid fa-car-side"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="start"
+                    id="start"
+                    placeholder="Start"
+                    autocomplete="street-address"
+                  />
+                  <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+                </div>
+
+                <!-- End -->
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon1">
+                    <i class="fa-solid fa-location-dot"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="end"
+                    id="end"
+                    placeholder="End"
+                    autocomplete="street-address"
+                  />
+                  <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <section>
+            <!-- Vehicle Info -->
+            <h2 class="h3">Vehicle</h2>
+            <div class="container-fluid p-0 vstack gap-2">
+              <!-- Year -->
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  id="yearSelect"
+                  aria-label="year select for car"
+                  disabled
+                >
+                  <option selected>Select Year</option>
+                </select>
+                <label for="yearSelect">Year</label>
               </div>
 
-              <!-- End -->
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">
-                  <i class="fa-solid fa-location-dot"></i>
-                </span>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="end"
-                  id="end"
-                  placeholder="End"
-                  autocomplete="street-address"
-                />
-                <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+              <!-- Make -->
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  id="makeSelect"
+                  aria-label="make select for car"
+                  disabled
+                >
+                  <option selected>Select Make</option>
+                </select>
+                <label for="makeSelect">Make</label>
+              </div>
+
+              <!-- Model -->
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  id="modelSelect"
+                  aria-label="model select for car"
+                  disabled
+                >
+                  <option selected>Select Model</option>
+                </select>
+                <label for="modelSelect">Model</label>
+              </div>
+
+              <!-- Options -->
+              <div class="form-floating">
+                <select
+                  class="form-select"
+                  id="optionsSelect"
+                  aria-label="options select for car"
+                  disabled
+                >
+                  <option selected>Select Options</option>
+                </select>
+                <label for="optionsSelect">Options</label>
               </div>
             </div>
-          </form>
-
-          <!-- Vehicle Info -->
-          <h2 class="h3">Vehicle</h2>
-          <div class="container-fluid p-0 mb-3 d-flex flex-column gap-2">
-            <!-- Year -->
-            <div class="form-floating">
-              <select
-                class="form-select"
-                id="yearSelect"
-                aria-label="year select for car"
-                disabled
-              >
-                <option selected>Select Year</option>
-              </select>
-              <label for="yearSelect">Year</label>
-            </div>
-
-            <!-- Make -->
-            <div class="form-floating">
-              <select
-                class="form-select"
-                id="makeSelect"
-                aria-label="make select for car"
-                disabled
-              >
-                <option selected>Select Make</option>
-              </select>
-              <label for="makeSelect">Make</label>
-            </div>
-
-            <!-- Model -->
-            <div class="form-floating">
-              <select
-                class="form-select"
-                id="modelSelect"
-                aria-label="model select for car"
-                disabled
-              >
-                <option selected>Select Model</option>
-              </select>
-              <label for="modelSelect">Model</label>
-            </div>
-
-            <!-- Options -->
-            <div class="form-floating">
-              <select
-                class="form-select"
-                id="optionsSelect"
-                aria-label="options select for car"
-                disabled
-              >
-                <option selected>Select Options</option>
-              </select>
-              <label for="optionsSelect">Options</label>
-            </div>
-          </div>
-
-          <button type="button" class="w-100 btn btn-success" id="saveTrip">
-            Save Trip
-          </button>
+          </section>
         </div>
 
         <div class="w-100 d-lg-none"></div>
 
-        <div class="col" id="map" style="min-height: 500px"></div>
+        <div class="col">
+          <div id="map" style="min-height: 500px"></div>
+          <div class="container-fluid"></div>
+        </div>
+
+        <div>
+          <button type="button" class="w-100 btn btn-success" id="saveTrip">
+            Save Trip
+          </button>
+        </div>
 
         <button type="button" class="w-100 btn btn-secondary" id="getTrips">
           Get Trips
