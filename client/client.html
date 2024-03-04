@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
-    <meta charset="utf-8" />
+    <title>Our simple HTTP server</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TripWiz</title>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="client.js" type="module"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -17,148 +22,106 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.js"></script>
-    <link
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <script src="./client.js" type="module"></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-secondary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <i class="fa-solid fa-car"></i> TripWiz
-        </a>
+        <a class="navbar-brand" href="/">TripWiz</a>
       </div>
     </nav>
-
-    <div class="container p-3">
-      <div class="row gap-3">
-        <div class="col-2 vstack justify-content-between">
-          <!-- Locations -->
-          <section>
-            <h2 class="h3">Addresses</h2>
-            <form action="">
-              <div class="container-fluid p-0 mb-3 vstack gap-2">
-                <!-- Start -->
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon1">
-                    <i class="fa-solid fa-car-side"></i>
-                  </span>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="start"
-                    id="start"
-                    placeholder="Start"
-                    autocomplete="street-address"
-                  />
-                  <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
-                </div>
-
-                <!-- End -->
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon1">
-                    <i class="fa-solid fa-location-dot"></i>
-                  </span>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="end"
-                    id="end"
-                    placeholder="End"
-                    autocomplete="street-address"
-                  />
-                  <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
-                </div>
-              </div>
-            </form>
-          </section>
-
-          <section>
-            <!-- Vehicle Info -->
-            <h2 class="h3">Vehicle</h2>
-            <div class="container-fluid p-0 vstack gap-2">
-              <!-- Year -->
-              <div class="form-floating">
-                <select
-                  class="form-select"
-                  id="yearSelect"
-                  aria-label="year select for car"
-                  disabled
-                >
-                  <option selected>Select Year</option>
-                </select>
-                <label for="yearSelect">Year</label>
-              </div>
-
-              <!-- Make -->
-              <div class="form-floating">
-                <select
-                  class="form-select"
-                  id="makeSelect"
-                  aria-label="make select for car"
-                  disabled
-                >
-                  <option selected>Select Make</option>
-                </select>
-                <label for="makeSelect">Make</label>
-              </div>
-
-              <!-- Model -->
-              <div class="form-floating">
-                <select
-                  class="form-select"
-                  id="modelSelect"
-                  aria-label="model select for car"
-                  disabled
-                >
-                  <option selected>Select Model</option>
-                </select>
-                <label for="modelSelect">Model</label>
-              </div>
-
-              <!-- Options -->
-              <div class="form-floating">
-                <select
-                  class="form-select"
-                  id="optionsSelect"
-                  aria-label="options select for car"
-                  disabled
-                >
-                  <option selected>Select Options</option>
-                </select>
-                <label for="optionsSelect">Options</label>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="w-100 d-lg-none"></div>
-
-        <div class="col">
-          <div id="map" style="min-height: 500px"></div>
-          <div class="container-fluid"></div>
-        </div>
-
-        <div>
-          <button type="button" class="w-100 btn btn-success" id="saveTrip">
-            Save Trip
-          </button>
-        </div>
-
-        <button type="button" class="w-100 btn btn-secondary" id="getTrips">
-          Get Trips
+    <div class="container-lg">
+      <section class="row mt-3">
+        <form
+          class="col-6 vstack gap-2"
+          id="vehicleForm"
+          method="get"
+          novalidate
+        >
+          <h2>Vehicle</h2>
+          <div class="form-floating">
+            <select class="form-select" id="yearSelect" required></select>
+            <label for="yearSelect">Year</label>
+          </div>
+          <div class="form-floating">
+            <select
+              class="form-select"
+              id="makeSelect"
+              disabled
+              required
+            ></select>
+            <label for="makeSelect">Make</label>
+          </div>
+          <div class="form-floating">
+            <select
+              class="form-select"
+              id="modelSelect"
+              disabled
+              required
+            ></select>
+            <label for="modelSelect">Model</label>
+          </div>
+          <div class="form-floating">
+            <select
+              class="form-select"
+              id="optionsSelect"
+              disabled
+              required
+            ></select>
+            <label for="optionsSelect">Options</label>
+          </div>
+          <input
+            type="submit"
+            value="Confirm Vehicle"
+            class="btn btn-success"
+            id="confirmVehicle"
+            disabled
+          />
+        </form>
+        <div class="w-100 d-lg-none m-3"></div>
+        <form class="col-6 vstack gap-2" id="routeForm" action="">
+          <h2>Route</h2>
+          <div class="form-floating">
+            <input
+              class="form-control"
+              id="address1"
+              type="text"
+              name="address1"
+              placeholder="123 Name St., City, AB 01234"
+              autocomplete="street-address"
+              required
+            />
+            <label for="address1">Start</label>
+          </div>
+          <div class="form-floating">
+            <input
+              class="form-control"
+              id="address2"
+              type="text"
+              name="address2"
+              placeholder="123 Name St., City, AB 01234"
+              autocomplete="street-address"
+              required
+            />
+            <label for="address2">End</label>
+          </div>
+          <input
+            type="submit"
+            value="Confirm Route"
+            class="btn btn-success mt-auto"
+            id="confirmRoute"
+            disabled
+          />
+        </form>
+      </section>
+      <hr />
+      <div class="row d-flex justify-content-center gap-2">
+        <button class="btn btn-primary w-25" id="calculateTrip">
+          Calculate Trip
         </button>
-        <div id="tripContent" class="container-fluid"></div>
+        <button class="btn btn-secondary w-25" id="getTrip">Get Trip</button>
       </div>
+      <hr />
+      <section id="trips" class="row gap-3 mt-3"></section>
     </div>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"
-    ></script>
   </body>
 </html>

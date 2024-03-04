@@ -1,26 +1,26 @@
-require("dotenv/config");
-const http = require("http");
-const url = require("url");
-const clientHandler = require("./clientHandler");
-const fuelEconomyHandler = require("./fuelEconomyHandler");
-const tripHandler = require("./tripHandler");
+const http = require('http');
+const url = require('url');
+const clientHandler = require('./clientHandler');
+const vehicleHandler = require('./vehicleResponse');
+const routeHandler = require('./routeHandler');
+const tripHandler = require('./tripHandler');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const parseBody = (request, response, handler) => {
   const body = [];
 
-  request.on("error", (err) => {
+  request.on('error', (err) => {
     console.dir(err);
     response.statusCode = 400;
     response.end();
   });
 
-  request.on("data", (chunk) => {
+  request.on('data', (chunk) => {
     body.push(chunk);
   });
 
-  request.on("end", () => {
+  request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = JSON.parse(bodyString);
 
@@ -30,40 +30,62 @@ const parseBody = (request, response, handler) => {
 
 const urlStruct = {
   GET: {
-    "/": clientHandler.getIndex,
-    "/client.js": clientHandler.getClientJS,
-    "/vehicleInfo": fuelEconomyHandler.getVehicleInfo,
-    "/trips": tripHandler.getTrips,
+    '/': clientHandler.getIndex,
+    '/client.js': clientHandler.getJS,
+    '/vehicle': vehicleHandler.getVehicle,
+    '/route': routeHandler.getRoute,
+    '/year': vehicleHandler.getYears,
+    '/make': vehicleHandler.getMakes,
+    '/model': vehicleHandler.getModels,
+    '/options': vehicleHandler.getOptions,
+    '/fuel': vehicleHandler.getFuelPrices,
+    '/vehicleProfile': vehicleHandler.getVehicleProfile,
+    '/trip': tripHandler.getTrip,
+    // "/getUsers": jsonHandler.getUsers,
     index: clientHandler.getIndex,
+    notFound: vehicleHandler.notFound,
   },
-  HEAD: {},
+  HEAD: {
+    '/vehicle': vehicleHandler.getVehicleMeta,
+    '/route': routeHandler.getRouteMeta,
+    '/trip': tripHandler.getTripMeta,
+    '/year': vehicleHandler.getYearsMeta,
+    '/make': vehicleHandler.getMakesMeta,
+    '/model': vehicleHandler.getModelsMeta,
+    '/options': vehicleHandler.getOptionsMeta,
+    '/fuel': vehicleHandler.getFuelPricesMeta,
+    '/vehicleProfile': vehicleHandler.getVehicleProfileMeta,
+    // "/getUsers": jsonHandler.getUsersMeta,
+    notFound: vehicleHandler.notFoundMeta,
+  },
   POST: {
-    "/addTrip": tripHandler.addTrip,
+    '/vehicle': vehicleHandler.setVehicle,
+    '/route': routeHandler.setRoute,
+    '/trip': tripHandler.addTrip,
+    // "/addUser": jsonHandler.addUser,
+    notFound: vehicleHandler.notFoundMeta,
   },
-};
-
-const handlePost = (request, response, parsedURL) => {
-  if (urlStruct.POST[parsedURL.pathname]) {
-    parseBody(request, response, tripHandler.addTrip);
-  }
 };
 
 const onRequest = (request, response) => {
   const parsedURL = url.parse(request.url);
 
-  if (request.method === "POST") {
-    return handlePost(request, response, parsedURL);
+  if (!urlStruct[request.method]) {
+    return urlStruct.HEAD.notFound(request, response);
   }
 
-  // Check if root endpoint exists
-  const endpoint =
-    urlStruct[request.method][`/${parsedURL.pathname.split("/")[1]}`];
-  if (endpoint) {
-    return endpoint(request, response, parsedURL);
+  if (request.method === 'POST') {
+    if (urlStruct.POST[parsedURL.pathname]) {
+      return parseBody(request, response, urlStruct.POST[parsedURL.pathname]);
+    }
+  } else if (urlStruct[request.method][parsedURL.pathname]) {
+    return urlStruct[request.method][parsedURL.pathname](
+      request,
+      response,
+      parsedURL,
+    );
   }
-  return urlStruct.GET.index(request, response);
+  return urlStruct[request.method].notFound(request, response);
 };
 
-http.createServer(onRequest).listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+http.createServer(onRequest).listen(port);

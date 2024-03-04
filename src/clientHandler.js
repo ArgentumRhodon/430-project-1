@@ -13,11 +13,11 @@ const getIndex = (request, response) => {
   respond(request, response, index, 'text/html');
 };
 
-const getClientJS = (request, response) => {
+const getJS = (request, response) => {
   respond(request, response, js, 'text/javascript');
 };
 
 module.exports = {
   getIndex,
-  getClientJS,
+  getJS,
 };
