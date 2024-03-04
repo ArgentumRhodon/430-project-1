@@ -41,7 +41,6 @@ const urlStruct = {
     "/fuel": vehicleHandler.getFuelPrices,
     "/vehicleProfile": vehicleHandler.getVehicleProfile,
     "/trip": tripHandler.getTrip,
-    // "/getUsers": jsonHandler.getUsers,
     index: clientHandler.getIndex,
     notFound: vehicleHandler.notFound,
   },
@@ -55,14 +54,12 @@ const urlStruct = {
     "/options": vehicleHandler.getOptionsMeta,
     "/fuel": vehicleHandler.getFuelPricesMeta,
     "/vehicleProfile": vehicleHandler.getVehicleProfileMeta,
-    // "/getUsers": jsonHandler.getUsersMeta,
     notFound: vehicleHandler.notFoundMeta,
   },
   POST: {
     "/vehicle": vehicleHandler.setVehicle,
     "/route": routeHandler.setRoute,
     "/trip": tripHandler.addTrip,
-    // "/addUser": jsonHandler.addUser,
     notFound: vehicleHandler.notFoundMeta,
   },
 };
